@@ -1,2 +1,3 @@
 # Jellyfish
- A Discord bot created with JDA.
+
+A Discord bot created with JDA.

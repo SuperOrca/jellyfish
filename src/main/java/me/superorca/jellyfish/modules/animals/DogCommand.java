@@ -42,13 +42,15 @@ public class DogCommand extends Command {
         bot.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                event.getHook().setEphemeral(true);
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("There was an error whilst running the command.").build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("An error occurred while running the command.").build()).queue();
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (!response.isSuccessful()) throw new IOException();
+                if (!response.isSuccessful()) {
+                    onFailure(call, new IOException());
+                    return;
+                }
 
                 JsonObject jsonObject = bot.getGson().fromJson(response.body().string(), JsonObject.class);
                 String url = jsonObject.get("link").getAsString();

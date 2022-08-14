@@ -29,6 +29,6 @@ public class SourceCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        event.getHook().editOriginalEmbeds(new Embed().setDescription("`Source:` [SuperOrca/Jellyfish](https://github.com/SuperOrca/Jellyfish)").build()).queue();
+        event.getHook().editOriginalEmbeds(new Embed().setDescription("Source: [`SuperOrca/Jellyfish`](https://github.com/SuperOrca/Jellyfish)").build()).queue();
     }
 }

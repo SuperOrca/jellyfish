@@ -6,6 +6,7 @@ import me.superorca.jellyfish.modules.animals.CatCommand;
 import me.superorca.jellyfish.modules.animals.DogCommand;
 import me.superorca.jellyfish.modules.misc.PingCommand;
 import me.superorca.jellyfish.modules.misc.SourceCommand;
+import me.superorca.jellyfish.modules.utility.IpCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -31,6 +32,9 @@ public class Registry extends ListenerAdapter {
                 // animals
                 new CatCommand(bot),
                 new DogCommand(bot),
+
+                // fun
+                new IpCommand(bot),
 
                 // misc
                 new PingCommand(bot),
@@ -77,7 +81,6 @@ public class Registry extends ListenerAdapter {
             Role botRole = event.getGuild().getBotRole();
             if (command.getBotPermission() != null) {
                 if (!botRole.hasPermission(command.getBotPermission()) && !botRole.hasPermission(Permission.ADMINISTRATOR)) {
-                    event.getHook().setEphemeral(true);
                     event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("I need the `" + command.getBotPermission().getName() + "` permission to execute that command.").build()).queue();
                     return;
                 }

@@ -1,6 +1,10 @@
 package me.superorca.jellyfish.modules.utility;
 
-import com.google.gson.JsonObject;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -8,13 +12,9 @@ import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -60,34 +60,23 @@ public class IpCommand extends Command {
             return;
         }
 
-        Request request = new Request.Builder().url("https://ipinfo.io/%s/json".formatted(ip)).build();
-        bot.getHttpClient().newCall(request).enqueue(new Callback() {
+        Unirest.get("https://ipinfo.io/%s/json".formatted(ip)).asJsonAsync(new Callback<JsonNode>() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("An error occurred while running the command.").build()).queue();
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    onFailure(call, new IOException());
-                    return;
-                }
-
-                JsonObject jsonObject = bot.getGson().fromJson(response.body().string(), JsonObject.class);
-                String rawIp = jsonObject.get("ip").getAsString();
-                String hostname = jsonObject.has("hostname") ? jsonObject.get("hostname").getAsString() : "N/A";
-                String[] parts = jsonObject.get("org").getAsString().split(" ");
+            public void completed(HttpResponse<JsonNode> response) {
+                JSONObject data = response.getBody().getObject();
+                String rawIp = data.getString("ip");
+                String hostname = data.has("hostname") ? data.getString("hostname") : "N/A";
+                String[] parts = data.has("org") ? data.getString("org").split(" ") : new String[]{"N/A", "N/A"};
                 String asn = parts[0];
                 String org = Stream.of(parts).skip(1).collect(Collectors.joining(" "));
-                boolean anycast = jsonObject.has("anycast") && jsonObject.get("anycast").getAsBoolean();
-                String[] coords = jsonObject.get("loc").getAsString().split(",");
+                boolean anycast = data.has("anycast") && data.getBoolean("anycast");
+                String[] coords = data.getString("loc").split(",");
                 String lat = coords[0];
                 String lon = coords[1];
-                String country = jsonObject.get("country").getAsString();
-                String region = jsonObject.get("region").getAsString();
-                String city = jsonObject.get("city").getAsString();
-                String postal = jsonObject.has("postal") ? jsonObject.get("postal").getAsString() : "N/A";
+                String country = data.getString("country");
+                String region = data.getString("region");
+                String city = data.getString("city");
+                String postal = data.has("postal") ? data.getString("postal") : "N/A";
                 event.getHook().editOriginalEmbeds(new Embed()
                         .setTitle(rawIp)
                         .setDescription("""
@@ -107,6 +96,16 @@ public class IpCommand extends Command {
                         .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
                         .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
                         .setFooter("Powered by ipinfo.io and yandex.ru").build()).queue();
+            }
+
+            @Override
+            public void failed(UnirestException e) {
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.").build()).queue();
+            }
+
+            @Override
+            public void cancelled() {
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("An error occurred whilst running the command.").build()).queue();
             }
         });
     }

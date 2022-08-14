@@ -33,12 +33,12 @@ public class Registry extends ListenerAdapter {
                 new CatCommand(bot),
                 new DogCommand(bot),
 
-                // fun
-                new IpCommand(bot),
-
                 // misc
                 new PingCommand(bot),
-                new SourceCommand(bot)
+                new SourceCommand(bot),
+
+                // utility
+                new IpCommand(bot)
         );
     }
 

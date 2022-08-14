@@ -7,6 +7,7 @@ import me.superorca.jellyfish.modules.animals.DogCommand;
 import me.superorca.jellyfish.modules.misc.PingCommand;
 import me.superorca.jellyfish.modules.misc.SourceCommand;
 import me.superorca.jellyfish.modules.utility.IpCommand;
+import me.superorca.jellyfish.modules.utility.UserInfoCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -38,7 +39,8 @@ public class Registry extends ListenerAdapter {
                 new SourceCommand(bot),
 
                 // utility
-                new IpCommand(bot)
+                new IpCommand(bot),
+                new UserInfoCommand(bot)
         );
     }
 

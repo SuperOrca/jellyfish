@@ -48,7 +48,7 @@ public class IpCommand extends Command {
 
     @Override
     public List<OptionData> getOptions() {
-        return List.of(new OptionData(OptionType.STRING, "ip", "A valid IPv4 address.", true));
+        return List.of(new OptionData(OptionType.STRING, "ip", "Enter a valid IPv4 address.", true));
     }
 
     @Override

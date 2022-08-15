@@ -40,7 +40,7 @@ If you have found a bug please [open an issue](https://github.com/SuperOrca/Jell
 possible, including relevant logs and screenshots where applicable.
 
 Have an idea for a new feature? Feel free to [open an issue](https://github.com/SuperOrca/Jellyfish/issues/new)
-or [join us on Discord](https://discord.gg/59bsgZB) to chat.
+or [join us on Discord](https://discord.gg/Ns7dkx6gSg) to chat.
 
 ## License
 

@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class UserInfoCommand extends Command {
-    public UserInfoCommand(Jellyfish bot) {
+public class UserCommand extends Command {
+    public UserCommand(Jellyfish bot) {
         super(bot);
     }
 
     @Override
     public @NotNull String getLabel() {
-        return "userinfo";
+        return "user";
     }
 
     @Override

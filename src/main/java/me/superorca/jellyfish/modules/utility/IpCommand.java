@@ -61,7 +61,7 @@ public class IpCommand extends Command {
             return;
         }
 
-        Unirest.get("https://ipinfo.io/%s/json".formatted(ip)).asJsonAsync(new Callback<JsonNode>() {
+        Unirest.get("https://ipinfo.io/%s/json".formatted(ip)).asJsonAsync(new Callback<>() {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
                 JSONObject data = response.getBody().getObject();

@@ -55,19 +55,22 @@ public class MinecraftCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        OptionMapping id = event.getOption("id");
-        OptionMapping ip = event.getOption("ip");
+        OptionMapping idOption = event.getOption("id");
+        OptionMapping ipOption = event.getOption("ip");
+        String id;
+        String ip;
 
         switch (event.getSubcommandName()) {
             case "status":
                 event.getHook().editOriginalEmbeds(new Embed(WARNING).setDescription("The API to view Minecraft's status has been discontinued. We are working on a solution.").build()).queue();
                 break;
             case "player":
-                Unirest.get("https://mc-heads.net/minecraft/profile/%s".formatted(id.getAsString())).asJsonAsync(new Callback<>() {
+                id = idOption.getAsString();
+                Unirest.get("https://mc-heads.net/minecraft/profile/%s".formatted(id)).asJsonAsync(new Callback<>() {
                     @Override
                     public void completed(HttpResponse<JsonNode> response) {
                         if (response.getStatus() == 204) {
-                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID.".formatted(ip)).build()).queue();
+                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID.".formatted(id)).build()).queue();
                             return;
                         }
 
@@ -101,11 +104,12 @@ public class MinecraftCommand extends Command {
                 });
                 break;
             case "skin":
-                Unirest.get("https://mc-heads.net/minecraft/profile/%s".formatted(id.getAsString())).asJsonAsync(new Callback<>() {
+                id = idOption.getAsString();
+                Unirest.get("https://mc-heads.net/minecraft/profile/%s".formatted(id)).asJsonAsync(new Callback<>() {
                     @Override
                     public void completed(HttpResponse<JsonNode> response) {
                         if (response.getStatus() == 204) {
-                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID.".formatted(ip)).build()).queue();
+                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID.".formatted(id)).build()).queue();
                             return;
                         }
 
@@ -132,14 +136,15 @@ public class MinecraftCommand extends Command {
                 });
                 break;
             case "server":
-                Unirest.get("https://api.mcsrvstat.us/2/%s".formatted(ip.getAsString())).asJsonAsync(new Callback<>() {
+                ip = ipOption.getAsString();
+                Unirest.get("https://api.mcsrvstat.us/2/%s".formatted(ip)).asJsonAsync(new Callback<>() {
                     @Override
                     public void completed(HttpResponse<JsonNode> response) {
                         JSONObject data = response.getBody().getObject();
 
                         JSONObject debug = data.getJSONObject("debug");
                         if (debug.has("error") && debug.getJSONObject("error").has("ping")) {
-                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft server IP.".formatted(ip.getAsString())).build()).queue();
+                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft server IP.".formatted(ip)).build()).queue();
                             return;
                         }
 

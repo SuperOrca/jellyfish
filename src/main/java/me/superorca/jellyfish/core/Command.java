@@ -2,6 +2,7 @@ package me.superorca.jellyfish.core;
 
 import me.superorca.jellyfish.Jellyfish;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -49,4 +50,7 @@ public abstract class Command {
     }
 
     public abstract void execute(@NotNull SlashCommandEvent event);
+
+    public void click(@NotNull ButtonClickEvent event) {
+    }
 }

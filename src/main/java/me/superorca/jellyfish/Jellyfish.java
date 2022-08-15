@@ -19,7 +19,7 @@ import java.time.Instant;
 // https://unsplash.com/photos/KLbUohEjb04
 @Getter
 public class Jellyfish implements Closeable {
-    private final Jellyfish instance;
+    private static Jellyfish instance;
     private final OkHttpClient httpClient;
     private final AnnotatedEventManager eventManager;
     private final ShardManager shardManager;
@@ -37,6 +37,10 @@ public class Jellyfish implements Closeable {
 
     public static void main(String[] args) throws LoginException {
         new Jellyfish();
+    }
+
+    public static Jellyfish getInstance() {
+        return instance;
     }
 
     @Override

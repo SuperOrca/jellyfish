@@ -11,24 +11,24 @@ import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import static me.superorca.jellyfish.core.embed.EmbedColor.ERROR;
 import static me.superorca.jellyfish.core.embed.EmbedColor.SUCCESS;
 
-public class DogCommand extends Command {
-    public DogCommand(Jellyfish bot) {
+public class ShibeCommand extends Command {
+    public ShibeCommand(Jellyfish bot) {
         super(bot);
     }
 
     @Override
     public @NotNull String getLabel() {
-        return "dog";
+        return "shibe";
     }
 
     @Override
     public @NotNull String getDescription() {
-        return "Random \uD83D\uDC36";
+        return "Random Shiba Inu \uD83D\uDC36";
     }
 
     @Override
@@ -38,11 +38,11 @@ public class DogCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        Unirest.get("https://api.thedogapi.com/v1/images/search?size=full&format=json?limit=1").asJsonAsync(new Callback<>() {
+        Unirest.get("https://shibe.online/api/shibes").asJsonAsync(new Callback<>() {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
-                JSONObject data = response.getBody().getArray().getJSONObject(0);
-                event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString("url")).setFooter("Powered by thedogapi.com").build()).queue();
+                JSONArray data = response.getBody().getArray();
+                event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString(0)).setFooter("Powered by shibe.online").build()).queue();
             }
 
             @Override

@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static me.superorca.jellyfish.core.embed.EmbedColor.ERROR;
+import static me.superorca.jellyfish.core.embed.EmbedColor.SUCCESS;
 
 public class IpCommand extends Command {
     private final Pattern pattern;
@@ -77,7 +78,7 @@ public class IpCommand extends Command {
                 String region = data.getString("region");
                 String city = data.getString("city");
                 String postal = data.has("postal") ? data.getString("postal") : "N/A";
-                event.getHook().editOriginalEmbeds(new Embed()
+                event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
                         .setTitle(rawIp)
                         .setDescription("""
                                 Hostname: `%s`

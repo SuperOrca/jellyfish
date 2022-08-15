@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum Category {
     ANIMALS(":dog:", "Animals"),
     FUN(":smile:", "Fun"),
+    MINECRAFT(":pick:", "Minecraft"),
     MISC(":gear:", "Misc"),
     UTILITY(":tools:", "Utility");
 

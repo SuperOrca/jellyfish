@@ -44,7 +44,7 @@ public class UserInfoCommand extends Command {
                 .setAuthor(user.getAsTag(), null, user.getAvatarUrl())
                 .setDescription("""
                         %s
-                        
+                                                
                         ID: `%d`
                         Created: <t:%d:f> (<t:%3$d:R>)
                         Avatar: [`link`](%s)

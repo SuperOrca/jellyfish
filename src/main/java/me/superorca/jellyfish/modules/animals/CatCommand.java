@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import static me.superorca.jellyfish.core.embed.EmbedColor.ERROR;
+import static me.superorca.jellyfish.core.embed.EmbedColor.SUCCESS;
 
 public class CatCommand extends Command {
     public CatCommand(Jellyfish bot) {
@@ -37,11 +38,11 @@ public class CatCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        Unirest.get("https://some-random-api.ml/img/cat").asJsonAsync(new Callback<>() {
+        Unirest.get("https://api.thecatapi.com/v1/images/search?size=full&format=json?limit=1").asJsonAsync(new Callback<>() {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
-                JSONObject data = response.getBody().getObject();
-                event.getHook().editOriginalEmbeds(new Embed().setImage(data.getString("link")).setFooter("Powered by some-random-api.ml").build()).queue();
+                JSONObject data = response.getBody().getArray().getJSONObject(0);
+                event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString("url")).setFooter("Powered by thecatapi.com").build()).queue();
             }
 
             @Override

@@ -1,6 +1,5 @@
 package me.superorca.jellyfish;
 
-import com.google.gson.Gson;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import lombok.Getter;
 import me.superorca.jellyfish.core.Registry;
@@ -21,7 +20,6 @@ import java.time.Instant;
 @Getter
 public class Jellyfish implements Closeable {
     private final Jellyfish instance;
-    private final Gson gson;
     private final OkHttpClient httpClient;
     private final AnnotatedEventManager eventManager;
     private final ShardManager shardManager;
@@ -30,7 +28,6 @@ public class Jellyfish implements Closeable {
 
     public Jellyfish() throws LoginException {
         instance = this;
-        gson = new Gson();
         httpClient = new OkHttpClient();
         eventManager = new AnnotatedEventManager();
         waiter = new EventWaiter();

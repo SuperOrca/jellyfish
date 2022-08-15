@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class Command {
 
@@ -26,6 +27,10 @@ public abstract class Command {
 
     @NotNull
     public abstract Category getCategory();
+
+    public Predicate<SlashCommandEvent> getChecks() {
+        return event -> true;
+    }
 
     public List<OptionData> getOptions() {
         return new ArrayList<>();

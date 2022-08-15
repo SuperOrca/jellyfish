@@ -4,8 +4,12 @@ import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.embed.Embed;
 import me.superorca.jellyfish.modules.animals.CatCommand;
 import me.superorca.jellyfish.modules.animals.DogCommand;
+import me.superorca.jellyfish.modules.animals.ShibeCommand;
+import me.superorca.jellyfish.modules.fun.MinecraftCommand;
+import me.superorca.jellyfish.modules.misc.InviteCommand;
 import me.superorca.jellyfish.modules.misc.PingCommand;
 import me.superorca.jellyfish.modules.misc.SourceCommand;
+import me.superorca.jellyfish.modules.misc.UptimeCommand;
 import me.superorca.jellyfish.modules.utility.IpCommand;
 import me.superorca.jellyfish.modules.utility.UserInfoCommand;
 import net.dv8tion.jda.api.Permission;
@@ -33,10 +37,16 @@ public class Registry extends ListenerAdapter {
                 // animals
                 new CatCommand(bot),
                 new DogCommand(bot),
+                new ShibeCommand(bot),
+
+                // fun
+                new MinecraftCommand(bot),
 
                 // misc
+                new InviteCommand(bot),
                 new PingCommand(bot),
                 new SourceCommand(bot),
+                new UptimeCommand(bot),
 
                 // utility
                 new IpCommand(bot),
@@ -47,9 +57,12 @@ public class Registry extends ListenerAdapter {
     public static List<CommandData> unpackCommandData() {
         List<CommandData> commandData = new ArrayList<>();
         for (Command command : commands) {
-            CommandData slashCommand = new CommandData(command.getLabel(), command.getDescription()).addOptions(command.getOptions());
+            CommandData slashCommand = new CommandData(command.getLabel(), command.getDescription());
             if (command.getUserPermission() != null) {
                 slashCommand.setDefaultEnabled(false);
+            }
+            if (!command.getOptions().isEmpty()) {
+                slashCommand.addOptions(command.getOptions());
             }
             if (!command.getSubcommands().isEmpty()) {
                 slashCommand.addSubcommands(command.getSubcommands());
@@ -87,7 +100,7 @@ public class Registry extends ListenerAdapter {
                     return;
                 }
             }
-            command.execute(event);
+            if (command.getChecks().test(event)) command.execute(event);
         }
     }
 

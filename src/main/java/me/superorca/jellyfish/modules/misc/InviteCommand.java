@@ -7,19 +7,19 @@ import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class SourceCommand extends Command {
-    public SourceCommand(Jellyfish bot) {
+public class InviteCommand extends Command {
+    public InviteCommand(Jellyfish bot) {
         super(bot);
     }
 
     @Override
     public @NotNull String getLabel() {
-        return "source";
+        return "invite";
     }
 
     @Override
     public @NotNull String getDescription() {
-        return "Source code of \uD83E\uDD16";
+        return "\uD83E\uDD16 invite";
     }
 
     @Override
@@ -29,6 +29,6 @@ public class SourceCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        event.getHook().editOriginalEmbeds(new Embed().setDescription("Github: [`SuperOrca/Jellyfish`](https://github.com/SuperOrca/Jellyfish)").build()).queue();
+        event.getHook().editOriginalEmbeds(new Embed().setDescription("Invite: [`link`](https://discord.com/api/oauth2/authorize?client_id=1007336443900874832&permissions=8&scope=bot%20applications.commands)").build()).queue();
     }
 }

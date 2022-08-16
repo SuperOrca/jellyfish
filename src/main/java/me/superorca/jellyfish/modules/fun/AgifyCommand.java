@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import java.util.List;
 
 import static me.superorca.jellyfish.core.embed.EmbedColor.ERROR;
-import static me.superorca.jellyfish.core.embed.EmbedColor.SUCCESS;
 
 public class AgifyCommand extends Command {
     public AgifyCommand(Jellyfish bot) {
@@ -60,9 +59,9 @@ public class AgifyCommand extends Command {
                         .setFooter("Powered by agify.io")
                         .setTitle(nameData)
                         .setDescription("""
-                        Age: `%d`
-                        Count: `%d`
-                        """.formatted(age, count)).build()).queue();
+                                Age: `%d`
+                                Count: `%d`
+                                """.formatted(age, count)).build()).queue();
             }
 
             @Override

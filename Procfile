@@ -1,0 +1,1 @@
+worker: mvn heroku:deploy

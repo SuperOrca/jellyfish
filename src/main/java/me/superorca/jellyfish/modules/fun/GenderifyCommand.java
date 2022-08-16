@@ -59,10 +59,10 @@ public class GenderifyCommand extends Command {
                         .setFooter("Powered by genderify.io")
                         .setTitle(nameData)
                         .setDescription("""
-                        Gender: `%s`
-                        Probability: `%.2f`
-                        Count: `%d`
-                        """.formatted(gender, probability, count)).build()).queue();
+                                Gender: `%s`
+                                Probability: `%.2f`
+                                Count: `%d`
+                                """.formatted(gender, probability, count)).build()).queue();
             }
 
             @Override

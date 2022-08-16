@@ -8,6 +8,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
+import me.superorca.jellyfish.core.Util;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -74,7 +75,7 @@ public class IpCommand extends Command {
                 String[] coords = data.getString("loc").split(",");
                 String lat = coords[0];
                 String lon = coords[1];
-                String country = data.getString("country");
+                String country = Util.getCountryName(data.getString("country"));
                 String region = data.getString("region");
                 String city = data.getString("city");
                 String postal = data.has("postal") ? data.getString("postal") : "N/A";

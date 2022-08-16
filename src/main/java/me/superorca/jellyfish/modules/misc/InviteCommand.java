@@ -30,8 +30,8 @@ public class InviteCommand extends Command {
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
         event.getHook().editOriginalEmbeds(new Embed().setDescription("""
-                Bot: [`Invite`](https://discord.com/api/oauth2/authorize?client_id=1007336443900874832&permissions=8&scope=bot%20applications.commands)
-                Support: [`Jellyfish's Ocean`](https://discord.gg/Ns7dkx6gSg)
-                """).build()).queue();
+                Bot: [`Invite`](%s)
+                Support: [`Jellyfish's Ocean`](%s)
+                """.formatted(bot.getConfig("invite"), bot.getConfig("support"))).build()).queue();
     }
 }

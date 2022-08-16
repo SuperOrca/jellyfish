@@ -1,1 +1,1 @@
-worker: java -cp target/classes:target/dependency/* Jellyfish.java
+worker: ls

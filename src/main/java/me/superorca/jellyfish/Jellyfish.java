@@ -35,7 +35,7 @@ public class Jellyfish implements Closeable {
         if (new File(".env").exists()) {
             dotenv = Dotenv.load();
         }
-        
+
         httpClient = new OkHttpClient();
         eventManager = new AnnotatedEventManager();
         waiter = new EventWaiter();

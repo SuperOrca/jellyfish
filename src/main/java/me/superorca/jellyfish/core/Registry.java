@@ -5,10 +5,7 @@ import me.superorca.jellyfish.core.embed.Embed;
 import me.superorca.jellyfish.modules.animals.CatCommand;
 import me.superorca.jellyfish.modules.animals.DogCommand;
 import me.superorca.jellyfish.modules.animals.ShibeCommand;
-import me.superorca.jellyfish.modules.fun.AgifyCommand;
-import me.superorca.jellyfish.modules.fun.GenderifyCommand;
-import me.superorca.jellyfish.modules.fun.MinecraftCommand;
-import me.superorca.jellyfish.modules.fun.NationalizeCommand;
+import me.superorca.jellyfish.modules.fun.*;
 import me.superorca.jellyfish.modules.misc.InviteCommand;
 import me.superorca.jellyfish.modules.misc.PingCommand;
 import me.superorca.jellyfish.modules.misc.SourceCommand;
@@ -48,6 +45,7 @@ public class Registry extends ListenerAdapter {
                 // fun
                 new AgifyCommand(bot),
                 new GenderifyCommand(bot),
+                new MemeCommand(bot),
                 new MinecraftCommand(bot),
                 new NationalizeCommand(bot),
 

@@ -41,6 +41,10 @@ public class MemeCommand extends Command {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
                 JSONObject data = response.getBody().getObject();
+                if (data.getBoolean("nsfw") && !event.getTextChannel().isNSFW()) {
+                    execute(event);
+                    return;
+                }
                 String link = data.getString("postLink");
                 String subreddit = data.getString("subreddit");
                 String title = data.getString("title");

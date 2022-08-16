@@ -10,10 +10,7 @@ import me.superorca.jellyfish.modules.misc.InviteCommand;
 import me.superorca.jellyfish.modules.misc.PingCommand;
 import me.superorca.jellyfish.modules.misc.SourceCommand;
 import me.superorca.jellyfish.modules.misc.UptimeCommand;
-import me.superorca.jellyfish.modules.utility.EmoteCommand;
-import me.superorca.jellyfish.modules.utility.IpCommand;
-import me.superorca.jellyfish.modules.utility.ServerCommand;
-import me.superorca.jellyfish.modules.utility.UserCommand;
+import me.superorca.jellyfish.modules.utility.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -56,6 +53,7 @@ public class Registry extends ListenerAdapter {
                 new UptimeCommand(bot),
 
                 // utility
+                new CardCommand(bot),
                 new EmoteCommand(bot),
                 new IpCommand(bot),
                 new ServerCommand(bot),

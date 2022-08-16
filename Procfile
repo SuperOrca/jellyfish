@@ -1,1 +1,1 @@
-worker: mvn -B -DskipTests clean dependency:list install
+worker: mvn heroku:deploy

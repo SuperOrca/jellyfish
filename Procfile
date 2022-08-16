@@ -1,1 +1,1 @@
-worker: ls
+worker: java -cp target/classes:target/dependency/* me.superorca.jellyfish.Jellyfish

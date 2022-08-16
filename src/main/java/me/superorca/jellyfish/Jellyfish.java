@@ -1,7 +1,6 @@
 package me.superorca.jellyfish;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import de.kaleidox.discordemoji.DiscordEmoji;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Getter;
 import me.superorca.jellyfish.core.Registry;
@@ -36,9 +35,7 @@ public class Jellyfish implements Closeable {
         if (new File(".env").exists()) {
             dotenv = Dotenv.load();
         }
-
-        DiscordEmoji.refreshEmojiCache();
-        DiscordEmoji.refreshEmojiPackCache();
+        
         httpClient = new OkHttpClient();
         eventManager = new AnnotatedEventManager();
         waiter = new EventWaiter();

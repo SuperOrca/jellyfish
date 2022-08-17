@@ -90,7 +90,9 @@ public class MinecraftCommand extends Command {
                                 .setTitle(name).setDescription("UUID: `%s`" .formatted(uuid))
                                 .addField("Name History", nameHistory.toString(), false)
                                 .setThumbnail("https://mc-heads.net/head/%s" .formatted(uuid))
-                                .setFooter("Powered by mc-heads.net").build()).queue();
+                                .setFooter("Powered by mc-heads.net and namemc.com").build()).setActionRow(
+                                Button.link("https://namemc.com/profile/%s" .formatted(name), "NameMC")
+                        ).queue();
                     }
 
                     @Override

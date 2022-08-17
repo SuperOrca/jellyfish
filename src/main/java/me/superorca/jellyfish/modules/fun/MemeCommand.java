@@ -53,14 +53,14 @@ public class MemeCommand extends Command {
                 event.getHook().editOriginalEmbeds(new Embed()
                         .setFooter("Powered by meme-api.herokuapp.com")
                         .setTitle(title, link)
-                        .setDescription("from `r/%s` by `u/%s`".formatted(subreddit, author))
+                        .setDescription("from `r/%s` by `u/%s`" .formatted(subreddit, author))
                         .setImage(url)
                         .build()).queue();
             }
 
             @Override
             public void failed(UnirestException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
             }
 
             @Override

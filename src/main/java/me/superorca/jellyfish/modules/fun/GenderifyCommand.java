@@ -47,7 +47,7 @@ public class GenderifyCommand extends Command {
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
         String name = event.getOption("name").getAsString();
-        Unirest.get("https://api.genderize.io/?name=%s".formatted(name)).asJsonAsync(new Callback<>() {
+        Unirest.get("https://api.genderize.io/?name=%s" .formatted(name)).asJsonAsync(new Callback<>() {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
                 JSONObject data = response.getBody().getObject();
@@ -67,7 +67,7 @@ public class GenderifyCommand extends Command {
 
             @Override
             public void failed(UnirestException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
             }
 
             @Override

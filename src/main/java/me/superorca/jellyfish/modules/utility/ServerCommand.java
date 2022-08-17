@@ -60,7 +60,7 @@ public class ServerCommand extends Command {
                         """.formatted(guild.getIdLong(), owner.getAsMention(), guild.getTimeCreated().toEpochSecond(), CATEGORY, categories, TEXT_CHANNEL, channels, VOICE_CHANNEL, vcs, humans, bots, MEMBERS, members, emojis, roles))
                 .setThumbnail(guild.getIconUrl())
                 .build()).setActionRow(
-                        Button.link(guild.getIconUrl(), "Icon")
+                Button.link(guild.getIconUrl(), "Icon")
         ).queue();
     }
 }

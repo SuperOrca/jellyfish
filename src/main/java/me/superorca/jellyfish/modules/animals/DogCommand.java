@@ -47,7 +47,7 @@ public class DogCommand extends Command {
 
             @Override
             public void failed(UnirestException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
             }
 
             @Override

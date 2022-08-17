@@ -6,7 +6,6 @@ import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.interactions.components.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class InviteCommand extends Command {

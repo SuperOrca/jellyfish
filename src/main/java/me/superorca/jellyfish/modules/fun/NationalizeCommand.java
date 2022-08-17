@@ -49,7 +49,7 @@ public class NationalizeCommand extends Command {
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
         String name = event.getOption("name").getAsString();
-        Unirest.get("https://api.nationalize.io/?name=%s".formatted(name)).asJsonAsync(new Callback<>() {
+        Unirest.get("https://api.nationalize.io/?name=%s" .formatted(name)).asJsonAsync(new Callback<>() {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
                 JSONObject data = response.getBody().getObject();
@@ -58,7 +58,7 @@ public class NationalizeCommand extends Command {
                 StringBuilder description = new StringBuilder();
                 for (int i = 0; i < countries.length(); i++) {
                     JSONObject country = countries.getJSONObject(i);
-                    description.append("%s: `%.2f`".formatted(Util.getCountryName(country.getString("country_id")), country.getDouble("probability"))).append("\n");
+                    description.append("%s: `%.2f`" .formatted(Util.getCountryName(country.getString("country_id")), country.getDouble("probability"))).append("\n");
                 }
                 event.getHook().editOriginalEmbeds(new Embed()
                         .setFooter("Powered by nationalize.io")
@@ -69,7 +69,7 @@ public class NationalizeCommand extends Command {
 
             @Override
             public void failed(UnirestException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
             }
 
             @Override

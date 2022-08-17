@@ -29,6 +29,6 @@ public class PingCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        event.getHook().editOriginalEmbeds(new Embed().setDescription(":ping_pong:  `%dms`".formatted(event.getJDA().getGatewayPing())).build()).queue();
+        event.getHook().editOriginalEmbeds(new Embed().setDescription(":ping_pong:  `%dms`" .formatted(event.getJDA().getGatewayPing())).build()).queue();
     }
 }

@@ -105,13 +105,13 @@ public class EmoteCommand extends Command {
                         }
                         Emote finalEmote = emote;
                         event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                                .setDescription("%s Added `%s`".formatted(finalEmote.getAsMention(), finalName))
+                                .setDescription("%s Added `%s`" .formatted(finalEmote.getAsMention(), finalName))
                                 .build()).queue();
                     }
 
                     @Override
                     public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
                     }
 
                     @Override
@@ -124,19 +124,19 @@ public class EmoteCommand extends Command {
                 name = nameOption.getAsString();
                 List<Emote> search = event.getGuild().getEmotesByName(name, true);
                 if (search.isEmpty()) {
-                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a emote.".formatted(name)).build()).queue();
+                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a emote." .formatted(name)).build()).queue();
                     return;
                 }
                 Emote emote = search.get(0);
                 emote.delete().queue();
-                event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`".formatted(emote.getName())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`" .formatted(emote.getName())).build()).queue();
                 break;
             case "add":
                 id = idOption.getAsString();
                 String slug = id.toLowerCase(Locale.ROOT).replace("-", "_");
                 Optional<JSONObject> optionalEmoji = emojis.stream().filter(emoji -> emoji.getString("slug").toLowerCase(Locale.ROOT).equals(slug)).findFirst();
                 if (optionalEmoji.isEmpty()) {
-                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid emote id from emote.gg.".formatted(slug)).build()).queue();
+                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid emote id from emote.gg." .formatted(slug)).build()).queue();
                     return;
                 }
                 JSONObject emoji = optionalEmoji.get();
@@ -152,13 +152,13 @@ public class EmoteCommand extends Command {
                         }
                         Emote finalEmote = emote;
                         event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                                .setDescription("%s Added `%s`".formatted(finalEmote.getAsMention(), emoji.getString("title")))
+                                .setDescription("%s Added `%s`" .formatted(finalEmote.getAsMention(), emoji.getString("title")))
                                 .build()).queue();
                     }
 
                     @Override
                     public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
                     }
 
                     @Override

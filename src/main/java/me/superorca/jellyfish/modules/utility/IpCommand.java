@@ -58,11 +58,11 @@ public class IpCommand extends Command {
         String ip = event.getOption("ip").getAsString();
 
         if (!pattern.matcher(ip).find()) {
-            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid IPv4 address.".formatted(ip)).build()).queue();
+            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid IPv4 address." .formatted(ip)).build()).queue();
             return;
         }
 
-        Unirest.get("https://ipinfo.io/%s/json".formatted(ip)).asJsonAsync(new Callback<>() {
+        Unirest.get("https://ipinfo.io/%s/json" .formatted(ip)).asJsonAsync(new Callback<>() {
             @Override
             public void completed(HttpResponse<JsonNode> response) {
                 JSONObject data = response.getBody().getObject();
@@ -95,14 +95,14 @@ public class IpCommand extends Command {
                                 City: `%s`
                                 Postal: `%s`
                                 """.formatted(lat, lon, country, region, city, postal), true)
-                        .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
-                        .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
+                        .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl" .formatted(lon, lat))
+                        .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl" .formatted(lon, lat))
                         .setFooter("Powered by ipinfo.io and yandex.ru").build()).queue();
             }
 
             @Override
             public void failed(UnirestException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
             }
 
             @Override

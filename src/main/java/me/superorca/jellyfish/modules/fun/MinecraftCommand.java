@@ -67,11 +67,11 @@ public class MinecraftCommand extends Command {
                 break;
             case "player":
                 id = idOption.getAsString();
-                Unirest.get("https://mc-heads.net/minecraft/profile/%s".formatted(id)).asJsonAsync(new Callback<>() {
+                Unirest.get("https://mc-heads.net/minecraft/profile/%s" .formatted(id)).asJsonAsync(new Callback<>() {
                     @Override
                     public void completed(HttpResponse<JsonNode> response) {
                         if (response.getStatus() == 204) {
-                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID.".formatted(id)).build()).queue();
+                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID." .formatted(id)).build()).queue();
                             return;
                         }
 
@@ -83,19 +83,19 @@ public class MinecraftCommand extends Command {
                         for (int i = nameData.length() - 1; i >= 0; i--) {
                             JSONObject jsonObject = nameData.getJSONObject(i);
                             String prevName = jsonObject.getString("name");
-                            nameHistory.append(jsonObject.has("changedToAt") ? "`%s` (<t:%d:R>)".formatted(prevName, jsonObject.getLong("changedToAt") / 1000L) : "`%s` (Original)".formatted(prevName)).append("\n");
+                            nameHistory.append(jsonObject.has("changedToAt") ? "`%s` (<t:%d:R>)" .formatted(prevName, jsonObject.getLong("changedToAt") / 1000L) : "`%s` (Original)" .formatted(prevName)).append("\n");
                         }
 
                         event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                                .setTitle(name).setDescription("UUID: `%s`".formatted(uuid))
+                                .setTitle(name).setDescription("UUID: `%s`" .formatted(uuid))
                                 .addField("Name History", nameHistory.toString(), false)
-                                .setThumbnail("https://mc-heads.net/head/%s".formatted(uuid))
+                                .setThumbnail("https://mc-heads.net/head/%s" .formatted(uuid))
                                 .setFooter("Powered by mc-heads.net").build()).queue();
                     }
 
                     @Override
                     public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
                     }
 
                     @Override
@@ -106,11 +106,11 @@ public class MinecraftCommand extends Command {
                 break;
             case "skin":
                 id = idOption.getAsString();
-                Unirest.get("https://mc-heads.net/minecraft/profile/%s".formatted(id)).asJsonAsync(new Callback<>() {
+                Unirest.get("https://mc-heads.net/minecraft/profile/%s" .formatted(id)).asJsonAsync(new Callback<>() {
                     @Override
                     public void completed(HttpResponse<JsonNode> response) {
                         if (response.getStatus() == 204) {
-                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID.".formatted(id)).build()).queue();
+                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft username or UUID." .formatted(id)).build()).queue();
                             return;
                         }
 
@@ -120,15 +120,15 @@ public class MinecraftCommand extends Command {
 
                         event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
                                 .setTitle(name)
-                                .setImage("https://mc-heads.net/body/%s".formatted(uuid))
+                                .setImage("https://mc-heads.net/body/%s" .formatted(uuid))
                                 .setFooter("Powered by mc-heads.net").build()).setActionRow(
-                                Button.link("https://mc-heads.net/download/%s".formatted(uuid), "Download")
+                                Button.link("https://mc-heads.net/download/%s" .formatted(uuid), "Download")
                         ).queue();
                     }
 
                     @Override
                     public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
                     }
 
                     @Override
@@ -139,14 +139,14 @@ public class MinecraftCommand extends Command {
                 break;
             case "server":
                 ip = ipOption.getAsString();
-                Unirest.get("https://api.mcsrvstat.us/2/%s".formatted(ip)).asJsonAsync(new Callback<>() {
+                Unirest.get("https://api.mcsrvstat.us/2/%s" .formatted(ip)).asJsonAsync(new Callback<>() {
                     @Override
                     public void completed(HttpResponse<JsonNode> response) {
                         JSONObject data = response.getBody().getObject();
 
                         JSONObject debug = data.getJSONObject("debug");
                         if (debug.has("error") && debug.getJSONObject("error").has("ping")) {
-                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft server IP.".formatted(ip)).build()).queue();
+                            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid Minecraft server IP." .formatted(ip)).build()).queue();
                             return;
                         }
 
@@ -187,7 +187,7 @@ public class MinecraftCommand extends Command {
 
                     @Override
                     public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command.".formatted(e.getMessage())).build()).queue();
+                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
                     }
 
                     @Override

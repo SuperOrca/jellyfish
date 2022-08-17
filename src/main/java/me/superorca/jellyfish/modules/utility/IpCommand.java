@@ -2,12 +2,10 @@ package me.superorca.jellyfish.modules.utility;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.async.Callback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
+import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.Util;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -58,57 +56,44 @@ public class IpCommand extends Command {
         String ip = event.getOption("ip").getAsString();
 
         if (!pattern.matcher(ip).find()) {
-            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid IPv4 address." .formatted(ip)).build()).queue();
+            event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid IPv4 address.".formatted(ip)).build()).queue();
             return;
         }
 
-        Unirest.get("https://ipinfo.io/%s/json" .formatted(ip)).asJsonAsync(new Callback<>() {
-            @Override
-            public void completed(HttpResponse<JsonNode> response) {
-                JSONObject data = response.getBody().getObject();
-                String rawIp = data.getString("ip");
-                String hostname = data.has("hostname") ? data.getString("hostname") : "N/A";
-                String[] parts = data.has("org") ? data.getString("org").split(" ") : new String[]{"N/A", "N/A"};
-                String asn = parts[0];
-                String org = Stream.of(parts).skip(1).collect(Collectors.joining(" "));
-                boolean anycast = data.has("anycast") && data.getBoolean("anycast");
-                String[] coords = data.getString("loc").split(",");
-                String lat = coords[0];
-                String lon = coords[1];
-                String country = Util.getCountryName(data.getString("country"));
-                String region = data.getString("region");
-                String city = data.getString("city");
-                String postal = data.has("postal") ? data.getString("postal") : "N/A";
-                event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                        .setTitle(rawIp)
-                        .setDescription("""
-                                Hostname: `%s`
-                                ASN: `%s`
-                                Org: `%s`
-                                Anycast? `%b`
-                                """.formatted(hostname, asn, org, anycast))
-                        .addField("Location", """
-                                Latitude: `%s`
-                                Longitude: `%s`
-                                Country: `%s`
-                                Region: `%s`
-                                City: `%s`
-                                Postal: `%s`
-                                """.formatted(lat, lon, country, region, city, postal), true)
-                        .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl" .formatted(lon, lat))
-                        .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl" .formatted(lon, lat))
-                        .setFooter("Powered by ipinfo.io and yandex.ru").build()).queue();
-            }
+        HttpResponse<JsonNode> response = Session.get("https://ipinfo.io/%s/json".formatted(ip));
 
-            @Override
-            public void failed(UnirestException e) {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
-            }
-
-            @Override
-            public void cancelled() {
-                event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("An error occurred whilst running the command.").build()).queue();
-            }
-        });
+        JSONObject data = response.getBody().getObject();
+        String rawIp = data.getString("ip");
+        String hostname = data.has("hostname") ? data.getString("hostname") : "N/A";
+        String[] parts = data.has("org") ? data.getString("org").split(" ") : new String[]{"N/A", "N/A"};
+        String asn = parts[0];
+        String org = Stream.of(parts).skip(1).collect(Collectors.joining(" "));
+        boolean anycast = data.has("anycast") && data.getBoolean("anycast");
+        String[] coords = data.getString("loc").split(",");
+        String lat = coords[0];
+        String lon = coords[1];
+        String country = Util.getCountryName(data.getString("country"));
+        String region = data.getString("region");
+        String city = data.getString("city");
+        String postal = data.has("postal") ? data.getString("postal") : "N/A";
+        event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
+                .setTitle(rawIp)
+                .setDescription("""
+                        Hostname: `%s`
+                        ASN: `%s`
+                        Org: `%s`
+                        Anycast? `%b`
+                        """.formatted(hostname, asn, org, anycast))
+                .addField("Location", """
+                        Latitude: `%s`
+                        Longitude: `%s`
+                        Country: `%s`
+                        Region: `%s`
+                        City: `%s`
+                        Postal: `%s`
+                        """.formatted(lat, lon, country, region, city, postal), true)
+                .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
+                .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
+                .setFooter("Powered by ipinfo.io and yandex.ru").build()).queue();
     }
 }

@@ -2,12 +2,10 @@ package me.superorca.jellyfish.modules.utility;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.async.Callback;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
+import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Icon;
@@ -32,23 +30,12 @@ public class EmoteCommand extends Command {
     public EmoteCommand(Jellyfish bot) {
         super(bot);
 
-        Unirest.get("https://emoji.gg/api").asJsonAsync(new Callback<>() {
-            @Override
-            public void completed(HttpResponse<JsonNode> response) {
-                JSONArray list = response.getBody().getArray();
-                for (int i = 0; i < list.length(); i++) {
-                    emojis.add(list.getJSONObject(i));
-                }
-            }
+        HttpResponse<JsonNode> response = Session.get("https://emoji.gg/api");
 
-            @Override
-            public void failed(UnirestException e) {
-            }
-
-            @Override
-            public void cancelled() {
-            }
-        });
+        JSONArray list = response.getBody().getArray();
+        for (int i = 0; i < list.length(); i++) {
+            emojis.add(list.getJSONObject(i));
+        }
     }
 
     @Override
@@ -87,85 +74,60 @@ public class EmoteCommand extends Command {
         String name;
         String link;
         String id;
+        HttpResponse<InputStream> response;
+        Emote emote;
+        InputStream file;
 
         switch (event.getSubcommandName()) {
             case "upload":
                 name = nameOption.getAsString();
                 link = linkOption.getAsString();
-                String finalName = name;
-                Unirest.get(link).asBinaryAsync(new Callback<>() {
-                    @Override
-                    public void completed(HttpResponse<InputStream> response) {
-                        InputStream file = response.getBody();
-                        Emote emote = null;
-                        try {
-                            emote = event.getGuild().createEmote(finalName, Icon.from(file)).complete();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Emote finalEmote = emote;
-                        event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                                .setDescription("%s Added `%s`" .formatted(finalEmote.getAsMention(), finalName))
-                                .build()).queue();
-                    }
 
-                    @Override
-                    public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
-                    }
-
-                    @Override
-                    public void cancelled() {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("An error occurred whilst running the command.").build()).queue();
-                    }
-                });
+                response = Session.getBinary(link);
+                file = response.getBody();
+                emote = null;
+                try {
+                    emote = event.getGuild().createEmote(name, Icon.from(file)).complete();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
+                        .setDescription("%s Added `%s`".formatted(emote.getAsMention(), name))
+                        .build()).queue();
                 break;
             case "remove":
                 name = nameOption.getAsString();
                 List<Emote> search = event.getGuild().getEmotesByName(name, true);
                 if (search.isEmpty()) {
-                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a emote." .formatted(name)).build()).queue();
+                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a emote.".formatted(name)).build()).queue();
                     return;
                 }
-                Emote emote = search.get(0);
+                emote = search.get(0);
                 emote.delete().queue();
-                event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`" .formatted(emote.getName())).build()).queue();
+                event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`".formatted(emote.getName())).build()).queue();
                 break;
             case "add":
                 id = idOption.getAsString();
                 String slug = id.toLowerCase(Locale.ROOT).replace("-", "_");
                 Optional<JSONObject> optionalEmoji = emojis.stream().filter(emoji -> emoji.getString("slug").toLowerCase(Locale.ROOT).equals(slug)).findFirst();
                 if (optionalEmoji.isEmpty()) {
-                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid emote id from emote.gg." .formatted(slug)).build()).queue();
+                    event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid emote id from emote.gg.".formatted(slug)).build()).queue();
                     return;
                 }
                 JSONObject emoji = optionalEmoji.get();
-                Unirest.get(emoji.getString("image")).asBinaryAsync(new Callback<>() {
-                    @Override
-                    public void completed(HttpResponse<InputStream> response) {
-                        InputStream file = response.getBody();
-                        Emote emote = null;
-                        try {
-                            emote = event.getGuild().createEmote(emoji.getString("title"), Icon.from(file)).complete();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Emote finalEmote = emote;
-                        event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                                .setDescription("%s Added `%s`" .formatted(finalEmote.getAsMention(), emoji.getString("title")))
-                                .build()).queue();
-                    }
 
-                    @Override
-                    public void failed(UnirestException e) {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` occurred whilst running the command." .formatted(e.getMessage())).build()).queue();
-                    }
+                response = Session.getBinary(emoji.getString("image"));
 
-                    @Override
-                    public void cancelled() {
-                        event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("An error occurred whilst running the command.").build()).queue();
-                    }
-                });
+                file = response.getBody();
+                emote = null;
+                try {
+                    emote = event.getGuild().createEmote(emoji.getString("title"), Icon.from(file)).complete();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
+                        .setDescription("%s Added `%s`".formatted(emote.getAsMention(), emoji.getString("title")))
+                        .build()).queue();
                 break;
         }
     }

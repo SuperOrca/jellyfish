@@ -32,6 +32,6 @@ public class UptimeCommand extends Command {
     public void execute(@NotNull SlashCommandEvent event) {
         long duration = System.currentTimeMillis() - bot.getStartTime().toEpochMilli();
         String uptime = DurationFormatUtils.formatDurationWords(duration, true, true);
-        event.getHook().editOriginalEmbeds(new Embed().setDescription("Uptime: `%s`" .formatted(uptime)).build()).queue();
+        event.getHook().editOriginalEmbeds(new Embed().setDescription("Uptime: `%s`".formatted(uptime)).build()).queue();
     }
 }

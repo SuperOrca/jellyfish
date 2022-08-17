@@ -5,6 +5,8 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class InviteCommand extends Command {
@@ -29,9 +31,9 @@ public class InviteCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        event.getHook().editOriginalEmbeds(new Embed().setDescription("""
-                Bot: [`Invite`](%s)
-                Support: [`Jellyfish's Ocean`](%s)
-                """.formatted(bot.getConfig("invite"), bot.getConfig("support"))).build()).queue();
+        event.getHook().editOriginalEmbeds(new Embed().setDescription("Click a link below to invite Jellyfish to your server.").build()).setActionRow(
+                Button.link(bot.getConfig("invite"), "Invite Jellyfish"),
+                Button.link(bot.getConfig("support"), "Support Server")
+        ).queue();
     }
 }

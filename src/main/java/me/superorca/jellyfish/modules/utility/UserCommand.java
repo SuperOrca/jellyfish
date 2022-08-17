@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -47,10 +48,11 @@ public class UserCommand extends Command {
                                                 
                         ID: `%d`
                         Created: <t:%d:f> (<t:%3$d:R>)
-                        Avatar: [`link`](%s)
-                        """.formatted(user.getAsMention(), user.getIdLong(), user.getTimeCreated().toEpochSecond(), user.getAvatarUrl()))
+                        """.formatted(user.getAsMention(), user.getIdLong(), user.getTimeCreated().toEpochSecond()))
                 .setThumbnail(user.getAvatarUrl())
                 .build()
+        ).setActionRow(
+                Button.link(user.getAvatarUrl(), "Avatar")
         ).queue();
     }
 }

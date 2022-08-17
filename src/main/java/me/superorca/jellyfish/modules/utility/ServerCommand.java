@@ -7,6 +7,7 @@ import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,12 +54,13 @@ public class ServerCommand extends Command {
                         Owner: %s
                         Created: <t:%d:f> (<t:%3$d:R>)
 
-                        Icon: [`link`](%s)
                         Channels: %s `%d` | %s `%d` | %s `%d`
                         Members: :bust_in_silhouette: `%d` | :robot: `%d` | %s `%d`
                         Misc: :smile: `%d` Emojis | :flag_white: `%d` Roles
-                        """.formatted(guild.getIdLong(), owner.getAsMention(), guild.getTimeCreated().toEpochSecond(), guild.getIconUrl(), CATEGORY, categories, TEXT_CHANNEL, channels, VOICE_CHANNEL, vcs, humans, bots, MEMBERS, members, emojis, roles))
+                        """.formatted(guild.getIdLong(), owner.getAsMention(), guild.getTimeCreated().toEpochSecond(), CATEGORY, categories, TEXT_CHANNEL, channels, VOICE_CHANNEL, vcs, humans, bots, MEMBERS, members, emojis, roles))
                 .setThumbnail(guild.getIconUrl())
-                .build()).queue();
+                .build()).setActionRow(
+                        Button.link(guild.getIconUrl(), "Icon")
+        ).queue();
     }
 }

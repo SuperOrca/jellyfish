@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -119,9 +120,10 @@ public class MinecraftCommand extends Command {
 
                         event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
                                 .setTitle(name)
-                                .setDescription("Download: [`link`](https://mc-heads.net/download/%s)".formatted(uuid))
                                 .setImage("https://mc-heads.net/body/%s".formatted(uuid))
-                                .setFooter("Powered by mc-heads.net").build()).queue();
+                                .setFooter("Powered by mc-heads.net").build()).setActionRow(
+                                Button.link("https://mc-heads.net/download/%s".formatted(uuid), "Download")
+                        ).queue();
                     }
 
                     @Override

@@ -5,9 +5,9 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -65,7 +65,7 @@ public class EmoteCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         OptionMapping nameOption = event.getOption("name");
         OptionMapping linkOption = event.getOption("link");
         OptionMapping idOption = event.getOption("id");
@@ -79,27 +79,26 @@ public class EmoteCommand extends Command {
                 link = linkOption.getAsString();
                 Session.getBinary(link, response -> {
                     InputStream file = response.getBody();
-                    Emote emote = null;
+                    RichCustomEmoji emoji = null;
                     try {
-                        emote = event.getGuild().createEmote(name, Icon.from(file)).complete();
+                        emoji = event.getGuild().createEmoji(name, Icon.from(file)).complete();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                            .setDescription("%s Added `%s`".formatted(emote.getAsMention(), name))
+                            .setDescription("%s Added `%s`".formatted(emoji.getAsMention(), name))
                             .build()).queue();
                 });
             }
             case "remove" -> {
                 name = nameOption.getAsString();
-                List<Emote> search = event.getGuild().getEmotesByName(name, true);
-                if (search.isEmpty()) {
+                RichCustomEmoji search = event.getGuild().getEmojiById(name);
+                if (search == null) {
                     event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a emote.".formatted(name)).build()).queue();
                     return;
                 }
-                Emote emote = search.get(0);
-                emote.delete().queue();
-                event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`".formatted(emote.getName())).build()).queue();
+                search.delete().queue();
+                event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`".formatted(search.getName())).build()).queue();
             }
             case "add" -> {
                 id = idOption.getAsString();
@@ -109,17 +108,17 @@ public class EmoteCommand extends Command {
                     event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a valid emote id from emote.gg.".formatted(slug)).build()).queue();
                     return;
                 }
-                JSONObject emoji = optionalEmoji.get();
-                Session.getBinary(emoji.getString("image"), response -> {
+                JSONObject emojiData = optionalEmoji.get();
+                Session.getBinary(emojiData.getString("image"), response -> {
                     InputStream file = response.getBody();
-                    Emote emote = null;
+                    RichCustomEmoji emoji = null;
                     try {
-                        emote = event.getGuild().createEmote(emoji.getString("title"), Icon.from(file)).complete();
+                        emoji = event.getGuild().createEmoji(emojiData.getString("title"), Icon.from(file)).complete();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                            .setDescription("%s Added `%s`".formatted(emote.getAsMention(), emoji.getString("title")))
+                            .setDescription("%s Added `%s`".formatted(emoji.getAsMention(), emojiData.getString("title")))
                             .build()).queue();
                 });
             }

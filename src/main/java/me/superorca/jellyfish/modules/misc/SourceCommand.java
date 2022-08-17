@@ -4,8 +4,8 @@ import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 
 public class SourceCommand extends Command {
@@ -29,7 +29,7 @@ public class SourceCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         event.getHook().editOriginalEmbeds(new Embed().setDescription("Click a link below to view Jellyfish's source.").build()).setActionRow(
                 Button.link(bot.getConfig("repository"), "Github")
         ).queue();

@@ -4,7 +4,7 @@ import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public class UptimeCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         long duration = System.currentTimeMillis() - bot.getStartTime().toEpochMilli();
         String uptime = DurationFormatUtils.formatDurationWords(duration, true, true);
         event.getHook().editOriginalEmbeds(new Embed().setDescription("Uptime: `%s`".formatted(uptime)).build()).queue();

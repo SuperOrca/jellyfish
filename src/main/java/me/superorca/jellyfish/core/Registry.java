@@ -14,11 +14,13 @@ import me.superorca.jellyfish.modules.utility.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -61,22 +63,17 @@ public class Registry extends ListenerAdapter {
         );
     }
 
-    public static List<CommandData> unpackCommandData() {
-        List<CommandData> commandData = new ArrayList<>();
+    public static List<SlashCommandData> unpackCommandData() {
+        List<SlashCommandData> slashCommandData = new ArrayList<>();
         for (Command command : commands) {
-            CommandData slashCommand = new CommandData(command.getLabel(), command.getDescription());
-            if (command.getUserPermission() != null) {
-                slashCommand.setDefaultEnabled(false);
-            }
-            if (!command.getOptions().isEmpty()) {
-                slashCommand.addOptions(command.getOptions());
-            }
-            if (!command.getSubcommands().isEmpty()) {
-                slashCommand.addSubcommands(command.getSubcommands());
-            }
-            commandData.add(slashCommand);
+            SlashCommandData slashCommand = Commands.slash(command.getLabel(), command.getDescription());
+            if (command.getUserPermission() != null)
+                slashCommand.setDefaultPermissions(DefaultMemberPermissions.enabledFor(command.getUserPermission()));
+            if (!command.getOptions().isEmpty()) slashCommand.addOptions(command.getOptions());
+            if (!command.getSubcommands().isEmpty()) slashCommand.addSubcommands(command.getSubcommands());
+            slashCommandData.add(slashCommand);
         }
-        return commandData;
+        return slashCommandData;
     }
 
     public static List<Command> getCommands() {
@@ -96,7 +93,7 @@ public class Registry extends ListenerAdapter {
 
     @Override
     @SubscribeEvent
-    public void onSlashCommand(@NotNull SlashCommandEvent event) {
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         Command command = commandsMap.get(event.getName());
         if (command != null) {
             event.deferReply().queue();
@@ -113,7 +110,7 @@ public class Registry extends ListenerAdapter {
 
     @Override
     @SubscribeEvent
-    public void onButtonClick(@NotNull ButtonClickEvent event) {
+    public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         Command command = commandsMap.get(event.getMessage().getInteraction().getName().split(" ")[0]);
         command.click(event);
     }

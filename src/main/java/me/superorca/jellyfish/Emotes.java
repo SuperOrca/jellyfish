@@ -1,7 +1,7 @@
 package me.superorca.jellyfish;
 
 import lombok.Getter;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 
 import static me.superorca.jellyfish.Jellyfish.getInstance;
 
@@ -52,11 +52,11 @@ public enum Emotes {
     MEMBERS(1008731702350336000L);
 
     private final long id;
-    private final Emote emote;
+    private final RichCustomEmoji emote;
 
     Emotes(long id) {
         this.id = id;
-        this.emote = getInstance().getShardManager().getEmoteById(id);
+        this.emote = getInstance().getShardManager().getEmojiById(id);
     }
 
     @Override

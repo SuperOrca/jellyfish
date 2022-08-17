@@ -5,7 +5,7 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class CatCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         Session.get("https://api.thecatapi.com/v1/images/search?size=full&format=json?limit=1", response -> {
             JSONObject data = response.getBody().getArray().getJSONObject(0);
             event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString("url")).setFooter("Powered by thecatapi.com").build()).queue();

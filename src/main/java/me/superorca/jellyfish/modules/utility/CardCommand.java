@@ -6,7 +6,7 @@ import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Util;
 import me.superorca.jellyfish.core.embed.Embed;
 import me.superorca.jellyfish.core.embed.EmbedColor;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -35,7 +35,7 @@ public class CardCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         BufferedImage image = new BufferedImage(3000, 300, TYPE_INT_ARGB);
 
         Font font = new Font("Arial", Font.BOLD, 120);

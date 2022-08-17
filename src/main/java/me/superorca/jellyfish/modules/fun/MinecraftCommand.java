@@ -5,11 +5,11 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,7 +47,7 @@ public class MinecraftCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         OptionMapping idOption = event.getOption("id");
         OptionMapping ipOption = event.getOption("ip");
         String id;

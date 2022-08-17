@@ -5,7 +5,7 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public class GenderifyCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         String name = event.getOption("name").getAsString();
 
         Session.get("https://api.genderize.io/?name=%s".formatted(name), response -> {

@@ -6,8 +6,8 @@ import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class ServerCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
         Member owner = guild.retrieveOwner().complete();
         int categories = guild.getCategories().size();
@@ -45,7 +45,7 @@ public class ServerCommand extends Command {
         int members = memberList.size();
         long bots = memberList.stream().filter(member -> member.getUser().isBot()).count();
         long humans = members - bots;
-        int emojis = guild.getEmotes().size();
+        int emojis = guild.getEmojis().size();
         int roles = guild.getRoles().size();
         event.getHook().editOriginalEmbeds(new Embed()
                 .setAuthor(guild.getName(), null, guild.getIconUrl())

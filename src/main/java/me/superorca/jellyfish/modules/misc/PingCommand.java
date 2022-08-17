@@ -4,7 +4,7 @@ import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class PingCommand extends Command {
@@ -28,7 +28,7 @@ public class PingCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         event.getHook().editOriginalEmbeds(new Embed().setDescription(":ping_pong:  `%dms`".formatted(event.getJDA().getGatewayPing())).build()).queue();
     }
 }

@@ -2,8 +2,8 @@ package me.superorca.jellyfish.core;
 
 import me.superorca.jellyfish.Jellyfish;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ public abstract class Command {
     @NotNull
     public abstract Category getCategory();
 
-    public Predicate<SlashCommandEvent> getChecks() {
+    public Predicate<SlashCommandInteractionEvent> getChecks() {
         return event -> true;
     }
 
@@ -46,11 +46,11 @@ public abstract class Command {
     }
 
     public Permission getBotPermission() {
-        return Permission.MESSAGE_WRITE;
+        return Permission.MESSAGE_SEND;
     }
 
-    public abstract void execute(@NotNull SlashCommandEvent event);
+    public abstract void execute(@NotNull SlashCommandInteractionEvent event);
 
-    public void click(@NotNull ButtonClickEvent event) {
+    public void click(@NotNull ButtonInteractionEvent event) {
     }
 }

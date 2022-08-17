@@ -5,10 +5,10 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.embed.Embed;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class UserCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         User user = event.getOption("user").getAsUser();
         event.getHook().editOriginalEmbeds(new Embed()
                 .setAuthor(user.getAsTag(), null, user.getAvatarUrl())

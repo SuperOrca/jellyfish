@@ -6,7 +6,7 @@ import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.Util;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +50,7 @@ public class IpCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         String ip = event.getOption("ip").getAsString();
 
         if (!pattern.matcher(ip).find()) {

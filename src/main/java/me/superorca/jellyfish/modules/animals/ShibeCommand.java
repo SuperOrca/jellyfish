@@ -5,7 +5,7 @@ import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
 import me.superorca.jellyfish.core.Session;
 import me.superorca.jellyfish.core.embed.Embed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
@@ -32,7 +32,7 @@ public class ShibeCommand extends Command {
     }
 
     @Override
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
         Session.get("https://shibe.online/api/shibes", response -> {
             JSONArray data = response.getBody().getArray();
             event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString(0)).setFooter("Powered by shibe.online").build()).queue();

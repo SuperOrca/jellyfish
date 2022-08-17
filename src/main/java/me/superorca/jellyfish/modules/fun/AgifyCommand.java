@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.fun;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -44,19 +42,19 @@ public class AgifyCommand extends Command {
     public void execute(@NotNull SlashCommandEvent event) {
         String name = event.getOption("name").getAsString();
 
-        HttpResponse<JsonNode> response = Session.get("https://api.agify.io/?name=%s".formatted(name));
+        Session.get("https://api.agify.io/?name=%s".formatted(name), response -> {
+            JSONObject data = response.getBody().getObject();
+            String nameData = data.getString("name");
+            int age = data.getInt("age");
+            int count = data.getInt("count");
 
-        JSONObject data = response.getBody().getObject();
-        String nameData = data.getString("name");
-        int age = data.getInt("age");
-        int count = data.getInt("count");
-
-        event.getHook().editOriginalEmbeds(new Embed()
-                .setFooter("Powered by agify.io")
-                .setTitle(nameData)
-                .setDescription("""
-                        Age: `%d`
-                        Count: `%d`
-                        """.formatted(age, count)).build()).queue();
+            event.getHook().editOriginalEmbeds(new Embed()
+                    .setFooter("Powered by agify.io")
+                    .setTitle(nameData)
+                    .setDescription("""
+                            Age: `%d`
+                            Count: `%d`
+                            """.formatted(age, count)).build()).queue();
+        });
     }
 }

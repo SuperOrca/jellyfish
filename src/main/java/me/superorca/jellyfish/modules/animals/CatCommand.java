@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.animals;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -35,9 +33,9 @@ public class CatCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        HttpResponse<JsonNode> response = Session.get("https://api.thecatapi.com/v1/images/search?size=full&format=json?limit=1");
-
-        JSONObject data = response.getBody().getArray().getJSONObject(0);
-        event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString("url")).setFooter("Powered by thecatapi.com").build()).queue();
+        Session.get("https://api.thecatapi.com/v1/images/search?size=full&format=json?limit=1", response -> {
+            JSONObject data = response.getBody().getArray().getJSONObject(0);
+            event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString("url")).setFooter("Powered by thecatapi.com").build()).queue();
+        });
     }
 }

@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.animals;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -35,9 +33,9 @@ public class ShibeCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        HttpResponse<JsonNode> response = Session.get("https://shibe.online/api/shibes");
-
-        JSONArray data = response.getBody().getArray();
-        event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString(0)).setFooter("Powered by shibe.online").build()).queue();
+        Session.get("https://shibe.online/api/shibes", response -> {
+            JSONArray data = response.getBody().getArray();
+            event.getHook().editOriginalEmbeds(new Embed(SUCCESS).setImage(data.getString(0)).setFooter("Powered by shibe.online").build()).queue();
+        });
     }
 }

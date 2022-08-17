@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.fun;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -46,20 +44,20 @@ public class NationalizeCommand extends Command {
     public void execute(@NotNull SlashCommandEvent event) {
         String name = event.getOption("name").getAsString();
 
-        HttpResponse<JsonNode> response = Session.get("https://api.nationalize.io/?name=%s".formatted(name));
-
-        JSONObject data = response.getBody().getObject();
-        String nameData = data.getString("name");
-        JSONArray countries = data.getJSONArray("country");
-        StringBuilder description = new StringBuilder();
-        for (int i = 0; i < countries.length(); i++) {
-            JSONObject country = countries.getJSONObject(i);
-            description.append("%s: `%.2f`".formatted(Util.getCountryName(country.getString("country_id")), country.getDouble("probability"))).append("\n");
-        }
-        event.getHook().editOriginalEmbeds(new Embed()
-                .setFooter("Powered by nationalize.io")
-                .setTitle(nameData)
-                .setDescription(description.toString())
-                .build()).queue();
+        Session.get("https://api.nationalize.io/?name=%s".formatted(name), response -> {
+            JSONObject data = response.getBody().getObject();
+            String nameData = data.getString("name");
+            JSONArray countries = data.getJSONArray("country");
+            StringBuilder description = new StringBuilder();
+            for (int i = 0; i < countries.length(); i++) {
+                JSONObject country = countries.getJSONObject(i);
+                description.append("%s: `%.2f`".formatted(Util.getCountryName(country.getString("country_id")), country.getDouble("probability"))).append("\n");
+            }
+            event.getHook().editOriginalEmbeds(new Embed()
+                    .setFooter("Powered by nationalize.io")
+                    .setTitle(nameData)
+                    .setDescription(description.toString())
+                    .build()).queue();
+        });
     }
 }

@@ -8,15 +8,15 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.experimental.UtilityClass;
 
 import java.io.InputStream;
+import java.util.function.Consumer;
 
 @UtilityClass
 public class Session {
-    public HttpResponse<JsonNode> get(String url) {
-        final HttpResponse<JsonNode>[] response = new HttpResponse[]{null};
+    public void get(String url, Consumer<HttpResponse<JsonNode>> consumer) {
         Unirest.get(url).asJsonAsync(new Callback<>() {
             @Override
-            public void completed(HttpResponse<JsonNode> result) {
-                response[0] = result;
+            public void completed(HttpResponse<JsonNode> response) {
+                consumer.accept(response);
             }
 
             @Override
@@ -29,15 +29,13 @@ public class Session {
                 new UnirestException("Cancelled").printStackTrace();
             }
         });
-        return response[0];
     }
 
-    public HttpResponse<InputStream> getBinary(String url) {
-        final HttpResponse<InputStream>[] response = new HttpResponse[]{null};
+    public void getBinary(String url, Consumer<HttpResponse<InputStream>> consumer) {
         Unirest.get(url).asBinaryAsync(new Callback<>() {
             @Override
-            public void completed(HttpResponse<InputStream> result) {
-                response[0] = result;
+            public void completed(HttpResponse<InputStream> response) {
+                consumer.accept(response);
             }
 
             @Override
@@ -50,6 +48,5 @@ public class Session {
                 new UnirestException("Cancelled").printStackTrace();
             }
         });
-        return response[0];
     }
 }

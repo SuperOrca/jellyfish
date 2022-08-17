@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.utility;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -60,40 +58,40 @@ public class IpCommand extends Command {
             return;
         }
 
-        HttpResponse<JsonNode> response = Session.get("https://ipinfo.io/%s/json".formatted(ip));
-
-        JSONObject data = response.getBody().getObject();
-        String rawIp = data.getString("ip");
-        String hostname = data.has("hostname") ? data.getString("hostname") : "N/A";
-        String[] parts = data.has("org") ? data.getString("org").split(" ") : new String[]{"N/A", "N/A"};
-        String asn = parts[0];
-        String org = Stream.of(parts).skip(1).collect(Collectors.joining(" "));
-        boolean anycast = data.has("anycast") && data.getBoolean("anycast");
-        String[] coords = data.getString("loc").split(",");
-        String lat = coords[0];
-        String lon = coords[1];
-        String country = Util.getCountryName(data.getString("country"));
-        String region = data.getString("region");
-        String city = data.getString("city");
-        String postal = data.has("postal") ? data.getString("postal") : "N/A";
-        event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                .setTitle(rawIp)
-                .setDescription("""
-                        Hostname: `%s`
-                        ASN: `%s`
-                        Org: `%s`
-                        Anycast? `%b`
-                        """.formatted(hostname, asn, org, anycast))
-                .addField("Location", """
-                        Latitude: `%s`
-                        Longitude: `%s`
-                        Country: `%s`
-                        Region: `%s`
-                        City: `%s`
-                        Postal: `%s`
-                        """.formatted(lat, lon, country, region, city, postal), true)
-                .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
-                .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
-                .setFooter("Powered by ipinfo.io and yandex.ru").build()).queue();
+        Session.get("https://ipinfo.io/%s/json".formatted(ip), response -> {
+            JSONObject data = response.getBody().getObject();
+            String rawIp = data.getString("ip");
+            String hostname = data.has("hostname") ? data.getString("hostname") : "N/A";
+            String[] parts = data.has("org") ? data.getString("org").split(" ") : new String[]{"N/A", "N/A"};
+            String asn = parts[0];
+            String org = Stream.of(parts).skip(1).collect(Collectors.joining(" "));
+            boolean anycast = data.has("anycast") && data.getBoolean("anycast");
+            String[] coords = data.getString("loc").split(",");
+            String lat = coords[0];
+            String lon = coords[1];
+            String country = Util.getCountryName(data.getString("country"));
+            String region = data.getString("region");
+            String city = data.getString("city");
+            String postal = data.has("postal") ? data.getString("postal") : "N/A";
+            event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
+                    .setTitle(rawIp)
+                    .setDescription("""
+                            Hostname: `%s`
+                            ASN: `%s`
+                            Org: `%s`
+                            Anycast? `%b`
+                            """.formatted(hostname, asn, org, anycast))
+                    .addField("Location", """
+                            Latitude: `%s`
+                            Longitude: `%s`
+                            Country: `%s`
+                            Region: `%s`
+                            City: `%s`
+                            Postal: `%s`
+                            """.formatted(lat, lon, country, region, city, postal), true)
+                    .setThumbnail("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=4&l=map&size=450,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
+                    .setImage("https://static-maps.yandex.ru/1.x/?lang=en-US&ll=%1$s,%2$s&z=10&l=map&size=650,450&pt=%1$s,%2$s,pm2rdl".formatted(lon, lat))
+                    .setFooter("Powered by ipinfo.io and yandex.ru").build()).queue();
+        });
     }
 }

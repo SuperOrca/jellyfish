@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.fun;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -44,20 +42,20 @@ public class GenderifyCommand extends Command {
     public void execute(@NotNull SlashCommandEvent event) {
         String name = event.getOption("name").getAsString();
 
-        HttpResponse<JsonNode> response = Session.get("https://api.genderize.io/?name=%s".formatted(name));
-
-        JSONObject data = response.getBody().getObject();
-        String nameData = data.getString("name");
-        String gender = data.getString("gender");
-        double probability = data.getDouble("probability");
-        int count = data.getInt("count");
-        event.getHook().editOriginalEmbeds(new Embed()
-                .setFooter("Powered by genderify.io")
-                .setTitle(nameData)
-                .setDescription("""
-                        Gender: `%s`
-                        Probability: `%.2f`
-                        Count: `%d`
-                        """.formatted(gender, probability, count)).build()).queue();
+        Session.get("https://api.genderize.io/?name=%s".formatted(name), response -> {
+            JSONObject data = response.getBody().getObject();
+            String nameData = data.getString("name");
+            String gender = data.getString("gender");
+            double probability = data.getDouble("probability");
+            int count = data.getInt("count");
+            event.getHook().editOriginalEmbeds(new Embed()
+                    .setFooter("Powered by genderify.io")
+                    .setTitle(nameData)
+                    .setDescription("""
+                            Gender: `%s`
+                            Probability: `%.2f`
+                            Count: `%d`
+                            """.formatted(gender, probability, count)).build()).queue();
+        });
     }
 }

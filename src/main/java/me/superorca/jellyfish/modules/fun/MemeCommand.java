@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.fun;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -33,23 +31,23 @@ public class MemeCommand extends Command {
 
     @Override
     public void execute(@NotNull SlashCommandEvent event) {
-        HttpResponse<JsonNode> response = Session.get("https://meme-api.herokuapp.com/gimme");
-
-        JSONObject data = response.getBody().getObject();
-        if (data.getBoolean("nsfw") && !event.getTextChannel().isNSFW()) {
-            execute(event);
-            return;
-        }
-        String link = data.getString("postLink");
-        String subreddit = data.getString("subreddit");
-        String title = data.getString("title");
-        String url = data.getString("url");
-        String author = data.getString("author");
-        event.getHook().editOriginalEmbeds(new Embed()
-                .setFooter("Powered by meme-api.herokuapp.com")
-                .setTitle(title, link)
-                .setDescription("from `r/%s` by `u/%s`".formatted(subreddit, author))
-                .setImage(url)
-                .build()).queue();
+        Session.get("https://meme-api.herokuapp.com/gimme", response -> {
+            JSONObject data = response.getBody().getObject();
+            if (data.getBoolean("nsfw") && !event.getTextChannel().isNSFW()) {
+                execute(event);
+                return;
+            }
+            String link = data.getString("postLink");
+            String subreddit = data.getString("subreddit");
+            String title = data.getString("title");
+            String url = data.getString("url");
+            String author = data.getString("author");
+            event.getHook().editOriginalEmbeds(new Embed()
+                    .setFooter("Powered by meme-api.herokuapp.com")
+                    .setTitle(title, link)
+                    .setDescription("from `r/%s` by `u/%s`".formatted(subreddit, author))
+                    .setImage(url)
+                    .build()).queue();
+        });
     }
 }

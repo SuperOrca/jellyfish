@@ -1,7 +1,5 @@
 package me.superorca.jellyfish.modules.utility;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import me.superorca.jellyfish.Jellyfish;
 import me.superorca.jellyfish.core.Category;
 import me.superorca.jellyfish.core.Command;
@@ -30,12 +28,12 @@ public class EmoteCommand extends Command {
     public EmoteCommand(Jellyfish bot) {
         super(bot);
 
-        HttpResponse<JsonNode> response = Session.get("https://emoji.gg/api");
-
-        JSONArray list = response.getBody().getArray();
-        for (int i = 0; i < list.length(); i++) {
-            emojis.add(list.getJSONObject(i));
-        }
+        Session.get("https://emoji.gg/api", response -> {
+            JSONArray list = response.getBody().getArray();
+            for (int i = 0; i < list.length(); i++) {
+                emojis.add(list.getJSONObject(i));
+            }
+        });
     }
 
     @Override
@@ -74,39 +72,36 @@ public class EmoteCommand extends Command {
         String name;
         String link;
         String id;
-        HttpResponse<InputStream> response;
-        Emote emote;
-        InputStream file;
 
         switch (event.getSubcommandName()) {
-            case "upload":
+            case "upload" -> {
                 name = nameOption.getAsString();
                 link = linkOption.getAsString();
-
-                response = Session.getBinary(link);
-                file = response.getBody();
-                emote = null;
-                try {
-                    emote = event.getGuild().createEmote(name, Icon.from(file)).complete();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                        .setDescription("%s Added `%s`".formatted(emote.getAsMention(), name))
-                        .build()).queue();
-                break;
-            case "remove":
+                Session.getBinary(link, response -> {
+                    InputStream file = response.getBody();
+                    Emote emote = null;
+                    try {
+                        emote = event.getGuild().createEmote(name, Icon.from(file)).complete();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
+                            .setDescription("%s Added `%s`".formatted(emote.getAsMention(), name))
+                            .build()).queue();
+                });
+            }
+            case "remove" -> {
                 name = nameOption.getAsString();
                 List<Emote> search = event.getGuild().getEmotesByName(name, true);
                 if (search.isEmpty()) {
                     event.getHook().editOriginalEmbeds(new Embed(ERROR).setDescription("`%s` is not a emote.".formatted(name)).build()).queue();
                     return;
                 }
-                emote = search.get(0);
+                Emote emote = search.get(0);
                 emote.delete().queue();
                 event.getHook().editOriginalEmbeds(new Embed().setDescription("Removed `%s`".formatted(emote.getName())).build()).queue();
-                break;
-            case "add":
+            }
+            case "add" -> {
                 id = idOption.getAsString();
                 String slug = id.toLowerCase(Locale.ROOT).replace("-", "_");
                 Optional<JSONObject> optionalEmoji = emojis.stream().filter(emoji -> emoji.getString("slug").toLowerCase(Locale.ROOT).equals(slug)).findFirst();
@@ -115,20 +110,19 @@ public class EmoteCommand extends Command {
                     return;
                 }
                 JSONObject emoji = optionalEmoji.get();
-
-                response = Session.getBinary(emoji.getString("image"));
-
-                file = response.getBody();
-                emote = null;
-                try {
-                    emote = event.getGuild().createEmote(emoji.getString("title"), Icon.from(file)).complete();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
-                        .setDescription("%s Added `%s`".formatted(emote.getAsMention(), emoji.getString("title")))
-                        .build()).queue();
-                break;
+                Session.getBinary(emoji.getString("image"), response -> {
+                    InputStream file = response.getBody();
+                    Emote emote = null;
+                    try {
+                        emote = event.getGuild().createEmote(emoji.getString("title"), Icon.from(file)).complete();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    event.getHook().editOriginalEmbeds(new Embed(SUCCESS)
+                            .setDescription("%s Added `%s`".formatted(emote.getAsMention(), emoji.getString("title")))
+                            .build()).queue();
+                });
+            }
         }
     }
 }
